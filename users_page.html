@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manage Users - Fake News Detection System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #f5f7fb;
+      color: #333;
+      min-height: 100vh;
+    }
+
+    /* Header (Top Bar) */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #ffffff;
+      padding: 15px 25px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      background-color: #2563eb;
+      color: #fff;
+      font-weight: 700;
+      font-size: 20px;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.4);
+    }
+
+    .logo span {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1e3a8a;
+      letter-spacing: 0.5px;
+    }
+
+    /* Sidebar Navigation */
+    .nav {
+      position: fixed;
+      left: 0;
+      top: 70px;
+      height: calc(100vh - 70px);
+      width: 230px;
+      background-color: #2f2f2f;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 25px 0;
+      gap: 10px;
+      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+      z-index: 9;
+    }
+
+    .nav a {
+      width: 100%;
+      text-decoration: none;
+      color: #e5e5e5;
+      font-weight: 500;
+      padding: 12px 25px;
+      border-left: 4px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .nav a:hover {
+      background-color: #444444;
+      color: #ffffff;
+      border-left: 4px solid #ffffff;
+    }
+
+    .nav a.logout {
+      margin-top: auto;
+      background-color: #ef4444;
+      color: #fff;
+      font-weight: 600;
+      border-left: none;
+      border-top: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .nav a.logout:hover {
+      background-color: #dc2626;
+    }
+
+    /* Main content area */
+    .content {
+      margin-left: 250px;
+      margin-top: 80px;
+      padding: 30px;
+      min-height: calc(100vh - 80px);
+      width: calc(100% - 250px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #1e3a8a;
+      width: 100%;
+    }
+
+    /* Table container for scrolling */
+    .table-container {
+      width: 90%;
+      max-width: 1000px;
+      max-height: calc(100vh - 200px);
+      overflow-y: auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-top: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+    }
+
+    th, td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #ddd;
+      text-align: center;
+    }
+
+    th {
+      background-color: #2563eb;
+      color: #fff;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f4f8;
+    }
+
+    tr:hover {
+      background-color: #e4e8f2;
+      transition: 0.3s;
+    }
+
+    button {
+      padding: 6px 10px;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .delete-btn {
+      background: #dc2626;
+      color: white;
+    }
+
+    .edit-btn {
+      background: #2563eb;
+      color: white;
+    }
+
+    .edit-btn:hover {
+      background-color: #1e40af;
+    }
+
+    .delete-btn:hover {
+      background-color: #b91c1c;
+    }
+
+    /* Edit form styling */
+    .edit-form {
+      display: none;
+      width: 400px;
+      margin: 30px auto;
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-radius: 8px;
+    }
+
+    .edit-form input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .edit-form button {
+      width: 100%;
+      padding: 10px;
+      background-color: #2563eb;
+      color: #fff;
+      font-weight: 600;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .no-data {
+      text-align: center;
+      color: #555;
+      font-style: italic;
+      padding: 20px;
+      margin-top: 50px;
+    }
+  </style>
+
+  <script>
+    function showEditForm(id, name, email) {
+      const form = document.getElementById('editForm');
+      form.style.display = 'block';
+      document.getElementById('edit_id').value = id;
+      document.getElementById('name').value = name;
+      document.getElementById('email').value = email;
+      window.scrollTo(0, document.body.scrollHeight);
+    }
+  </script>
+</head>
+
+<body>
+  <div class="header">
+    <div class="logo">
+      <div class="logo-icon">FD</div>
+      <span>FakeDetect</span>
+    </div>
+  </div>
+
+  <div class="nav">
+    <a href="{{ url_for('admin_home') }}">Home</a>
+    <a href="{{ url_for('add_URLs') }}">Add URLs</a>
+    <a href="{{ url_for('users_page') }}" style="background:#444; border-left:4px solid #fff;">Users</a>
+    <a href="{{ url_for('insert_news_page') }}">Insert News</a>
+    <a href="{{ url_for('newsportals') }}">News Portal</a>
+    <a href="{{ url_for('news') }}">News</a>
+    <a href="{{ url_for('logout') }}" class="logout">Log Out</a>
+  </div>
+
+  <div class="content">
+    <h2>Manage Users</h2>
+
+    {% if users %}
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for user in users %}
+            <tr>
+              <td>{{ user[0] }}</td>
+              <td>{{ user[1] }}</td>
+              <td>{{ user[2] }}</td>
+              <td>
+                <form method="POST" style="display:inline;">
+                  <input type="hidden" name="delete_id" value="{{ user[0] }}">
+                  <button type="submit" class="delete-btn">Delete</button>
+                </form>
+                <button class="edit-btn" type="button" onclick="showEditForm('{{ user[0] }}','{{ user[1] }}','{{ user[2] }}')">Edit</button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="no-data">No users available.</div>
+    {% endif %}
+
+    <div id="editForm" class="edit-form">
+      <h3 style="text-align:center;">Edit User</h3>
+      <form method="POST">
+        <input type="hidden" name="edit_id" id="edit_id">
+        <input type="text" name="name" id="name" placeholder="Enter Name" required>
+        <input type="email" name="email" id="email" placeholder="Enter Email" required>
+        <button type="submit">Update</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

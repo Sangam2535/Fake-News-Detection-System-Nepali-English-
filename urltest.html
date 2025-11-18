@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fake News Detection System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-blue: #2563eb;
+      --primary-green: #10b981;
+      --accent-red: #ef4444;
+      --dark-gray: #1f2937;
+      --light-gray: #f3f4f6;
+      --white: #ffffff;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--light-gray);
+      color: var(--dark-gray);
+      line-height: 1.6;
+    }
+
+    /* Header Styles */
+    .header {
+      background: var(--white);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 40px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      position: relative;
+      z-index: 10;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 1.2em;
+      font-weight: 700;
+      color: var(--dark-gray);
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      margin-right: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+      color: var(--white);
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .nav a {
+      margin-left: 25px;
+      text-decoration: none;
+      color: var(--dark-gray);
+      font-weight: 500;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .nav a:hover {
+      color: var(--primary-blue);
+    }
+
+    .nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary-blue);
+      transition: var(--transition);
+    }
+
+    .nav a:hover::after {
+      width: 100%;
+    }
+
+    .logout {
+      color: var(--accent-red);
+      font-weight: 600;
+    }
+
+    /* URL Checker Section */
+    .url-checker-section {
+      padding: 60px 40px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .url-checker-card {
+      background: var(--white);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .url-checker-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(to right, var(--primary-blue), var(--primary-green));
+    }
+
+    .url-checker-card h1 {
+      font-size: 1.8em;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--dark-gray);
+    }
+
+    .url-checker-card p {
+      color: #64748b;
+      margin-bottom: 30px;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--dark-gray);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 1em;
+      font-family: 'Poppins', sans-serif;
+      transition: var(--transition);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .form-submit {
+      background-color: var(--primary-blue);
+      color: var(--white);
+      padding: 14px 28px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+    }
+
+    .form-submit:hover {
+      background-color: #1d4ed8;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    .form-submit:active {
+      transform: translateY(1px);
+    }
+
+    .form-submit:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+    }
+
+    /* Result Section */
+    .result-section {
+      margin-top: 30px;
+      padding: 25px;
+      border-radius: 12px;
+      background-color: #f8fafc;
+      border-left: 4px solid var(--primary-blue);
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .result-title {
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--dark-gray);
+      font-size: 1.2em;
+      display: flex;
+      align-items: center;
+    }
+
+    .result-title i {
+      margin-right: 10px;
+      font-size: 1.3em;
+    }
+
+    .result-message {
+      color: #64748b;
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+
+    .result-status {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.9em;
+      font-weight: 600;
+    }
+
+    .status-safe {
+      background-color: rgba(16, 185, 129, 0.1);
+      color: var(--primary-green);
+    }
+
+    .status-warning {
+      background-color: rgba(245, 158, 11, 0.1);
+      color: #f59e0b;
+    }
+
+    .status-danger {
+      background-color: rgba(239, 68, 68, 0.1);
+      color: var(--accent-red);
+    }
+
+    .result-details {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .detail-item {
+      display: flex;
+      margin-bottom: 10px;
+    }
+
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: var(--dark-gray);
+    }
+
+    .detail-value {
+      color: #64748b;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .header {
+        padding: 15px 20px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav {
+        margin-top: 15px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .nav a {
+        margin-left: 0;
+        margin-right: 15px;
+      }
+
+      .url-checker-section {
+        padding: 40px 20px;
+      }
+
+      .url-checker-card {
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="logo">
+      <div class="logo-icon">FD</div>
+      <span>FakeDetect</span>
+    </div>
+    <div class="nav">
+      <a href="{{ url_for('home') }}">Home</a>
+      <a href="{{ url_for('english') }}">English News</a>
+      <a href="{{ url_for('nepali') }}">Nepali News</a>
+      <a href="{{ url_for('urltest') }}">Check URL</a>
+      <a href="{{ url_for('logout') }}" class="logout">Log Out</a>
+    </div>
+  </div>
+
+  <div class="url-checker-section">
+    <div class="url-checker-card">
+      <h1>Website Authenticity Check</h1>
+      <p>Enter a website URL to verify if it's registered in our database of trusted sources.</p>
+      
+      <form method="POST" id="urlForm">
+        <div class="form-group">
+          <label for="url" class="form-label">Website URL</label>
+          <input type="text" name="url" id="url" class="form-input" placeholder="https://example.com" required>
+        </div>
+        <button type="submit" class="form-submit">
+          <span>Check URL Authenticity</span>
+        </button>
+      </form>
+      
+      {% if message %}
+      <div class="result-section">
+        <div class="result-title">
+          <i>🔍</i> Analysis Result
+        </div>
+        <div class="result-message">{{ message }}</div>
+        
+        {% if "registered" in message.lower() and "not" not in message.lower() %}
+          <div class="result-status status-safe">Verified Source</div>
+          <div class="result-details">
+            <div class="detail-item">
+              <div class="detail-label">Status:</div>
+              <div class="detail-value">This website is registered in our database</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Trust Level:</div>
+              <div class="detail-value">High - Verified legitimate source</div>
+            </div>
+          </div>
+        {% elif "not registered" in message.lower() %}
+          <div class="result-status status-warning">Unverified Source</div>
+          <div class="result-details">
+            <div class="detail-item">
+              <div class="detail-label">Status:</div>
+              <div class="detail-value">This website from registrated news sources.</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Recommendation:</div>
+              <div class="detail-value">Proceed with caution and verify information from other sources</div>
+            </div>
+          </div>
+        {% elif "fake" in message.lower() or "misinformation" in message.lower() %}
+          <div class="result-status status-danger">Potential Fake News</div>
+          <div class="result-details">
+            <div class="detail-item">
+              <div class="detail-label">Status:</div>
+              <div class="detail-value">This website has been flagged for spreading misinformation</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Recommendation:</div>
+              <div class="detail-value">Avoid this source and do not share its content</div>
+            </div>
+          </div>
+        {% else %}
+          <div class="result-status status-warning">Keep Caution</div>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+</body>
+</html>

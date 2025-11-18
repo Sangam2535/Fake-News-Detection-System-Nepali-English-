@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fake News Detection System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #f5f7fb;
+      color: #333;
+      min-height: 100vh;
+    }
+
+    /* Header (Top Bar) */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #ffffff;
+      padding: 15px 25px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      background-color: #2563eb;
+      color: #fff;
+      font-weight: 700;
+      font-size: 20px;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.4);
+    }
+
+    .logo span {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1e3a8a;
+      letter-spacing: 0.5px;
+    }
+
+    /* Sidebar Navigation */
+    .nav {
+      position: fixed;
+      left: 0;
+      top: 70px; /* height of header */
+      height: calc(100vh - 70px);
+      width: 230px;
+      background-color: #2f2f2f; /* dark gray */
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 25px 0;
+      gap: 10px;
+      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+      z-index: 9;
+    }
+
+    .nav a {
+      width: 100%;
+      text-decoration: none;
+      color: #e5e5e5; /* light gray text */
+      font-weight: 500;
+      padding: 12px 25px;
+      border-left: 4px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .nav a:hover {
+      background-color: #444444; /* slightly lighter gray on hover */
+      color: #ffffff;
+      border-left: 4px solid #ffffff;
+    }
+
+    .nav a.logout {
+      margin-top: auto;
+      background-color: #ef4444;
+      color: #fff;
+      font-weight: 600;
+      border-left: none;
+      border-top: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .nav a.logout:hover {
+      background-color: #dc2626;
+    }
+
+    /* Main content area */
+    .container {
+      margin-left: 250px;
+      margin-top: 80px;
+      padding: 30px;
+      min-height: calc(100vh - 80px);
+      width: calc(100% - 250px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Table styling */
+    table {
+      width: 90%;
+      max-width: 1000px;
+      border-collapse: collapse;
+      background-color: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #2563eb;
+      color: #fff;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f4f8;
+    }
+
+    tr:hover {
+      background-color: #e4e8f2;
+      transition: 0.3s;
+    }
+
+    .url-link {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .url-link:hover {
+      text-decoration: underline;
+    }
+
+    .no-data {
+      text-align: center;
+      color: #555;
+      font-style: italic;
+      padding: 20px;
+      margin-top: 50px;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      color: #1e3a8a;
+      text-align: center;
+      width: 100%;
+    }
+
+    /* Table container for scrolling */
+    .table-container {
+      width: 90%;
+      max-width: 1000px;
+      max-height: calc(100vh - 200px);
+      overflow-y: auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-top: 20px;
+    }
+
+    .table-container table {
+      width: 100%;
+      max-width: 100%;
+      margin-top: 0;
+      border-radius: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <div class="logo">
+      <div class="logo-icon">FD</div>
+      <span>FakeDetect</span>
+    </div>
+  </div>
+
+  <div class="nav">
+    <a href="{{ url_for('admin_home') }}">Home</a>
+    <a href="{{ url_for('add_URLs') }}">Add URLs</a>
+    <a href="{{ url_for('users_page') }}">Users</a>
+    <a href="{{ url_for('insert_news_page') }}">Insert News</a>
+    <a href="{{ url_for('newsportals') }}">News Portal</a>
+    <a href="{{ url_for('news') }}">News</a>
+    <a href="{{ url_for('logout') }}" class="logout">Log Out</a>
+  </div>
+
+  <div class="container">
+    <h1>Registered News Portals</h1>
+    {% if websites %}
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Portal Name</th>
+              <th>URL</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for site in websites %}
+            <tr>
+              <td>{{ site[0] }}</td>
+              <td>{{ site[1] }}</td>
+              <td><a href="{{ site[2] }}" target="_blank" class="url-link">{{ site[2] }}</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="no-data">No news portals available.</div>
+    {% endif %}
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fake News Detection System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-blue: #2563eb;
+      --primary-green: #10b981;
+      --accent-red: #ef4444;
+      --dark-gray: #1f2937;
+      --light-gray: #f3f4f6;
+      --white: #ffffff;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --nepal-orange: #FF8C00;
+      --nepal-blue: #003366;
+      --himalayan-white: #F5F5F5;
+      --himalayan-gray: #E0E0E0;
+      --text-dark: #333333;
+      --text-light: #FFFFFF;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: var(--dark-gray);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Improved Header Styles */
+    .header {
+      background: var(--white);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 40px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      position: relative;
+      z-index: 10;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 1.2em;
+      font-weight: 700;
+      color: var(--dark-gray);
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      margin-right: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+      color: var(--white);
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .nav a {
+      margin-left: 25px;
+      text-decoration: none;
+      color: var(--dark-gray);
+      font-weight: 500;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .nav a:hover {
+      color: var(--primary-blue);
+    }
+
+    .nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary-blue);
+      transition: var(--transition);
+    }
+
+    .nav a:hover::after {
+      width: 100%;
+    }
+
+    .logout {
+      color: var(--accent-red);
+      font-weight: 600;
+    }
+
+    /* MAIN CONTENT STYLES */
+    .main-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+      background: linear-gradient(135deg, var(--himalayan-white), var(--himalayan-gray));
+      background-image: url('https://i.imgur.com/JQq7XzD.jpg');
+      background-size: cover;
+      background-attachment: fixed;
+      background-position: center;
+    }
+
+    .main-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.85);
+      z-index: 0;
+    }
+
+    .content-wrapper {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      color: var(--nepal-blue);
+      text-align: center;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      position: relative;
+      padding-bottom: 1rem;
+      font-family: 'Noto Sans Devanagari', sans-serif;
+    }
+
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: var(--nepal-orange);
+      border-radius: 2px;
+    }
+
+    form {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      width: 100%;
+      max-width: 700px;
+      transition: var(--transition);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+      margin: 0 auto;
+    }
+
+    form::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 8px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--nepal-orange), var(--nepal-blue));
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 200px;
+      padding: 1.5rem;
+      border: 2px solid var(--himalayan-gray);
+      border-radius: 8px;
+      font-size: 1rem;
+      resize: vertical;
+      transition: var(--transition);
+      margin-bottom: 1.5rem;
+      background-color: rgba(255, 255, 255, 0.9);
+      color: var(--text-dark);
+      font-family: 'Noto Sans Devanagari', sans-serif;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: var(--nepal-orange);
+      box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.2);
+    }
+
+    textarea::placeholder {
+      color: #999;
+      font-style: italic;
+    }
+
+    button {
+      background: linear-gradient(45deg, var(--nepal-blue), var(--nepal-orange));
+      color: var(--text-light);
+      border: none;
+      padding: 1rem 2.5rem;
+      font-size: 1.1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: block;
+      margin: 0 auto;
+      box-shadow: 0 4px 15px rgba(0, 51, 102, 0.3);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      position: relative;
+      overflow: hidden;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 51, 102, 0.4);
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    button::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, var(--nepal-orange), var(--nepal-blue));
+      opacity: 0;
+      transition: var(--transition);
+      z-index: -1;
+    }
+
+    button:hover::after {
+      opacity: 1;
+    }
+
+    .prediction-container {
+      margin-top: 2.5rem;
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      width: 100%;
+      max-width: 700px;
+      animation: fadeIn 0.6s ease;
+      text-align: center;
+      margin: 2.5rem auto 0;
+    }
+
+    .prediction-container.real {
+      border-left: 5px solid #4CAF50;
+    }
+
+    .prediction-container.fake {
+      border-left: 5px solid #F44336;
+    }
+
+    .prediction-container h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .prediction-container.real h2 {
+      color: #4CAF50;
+    }
+
+    .prediction-container.fake h2 {
+      color: #F44336;
+    }
+
+    .prediction-container h2::before {
+      margin-right: 0.8rem;
+      font-size: 1.5rem;
+    }
+
+    .prediction-container.real h2::before {
+      content: '✓';
+    }
+
+    .prediction-container.fake h2::before {
+      content: '✗';
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Floating elements for visual interest */
+    .floating-element {
+      position: absolute;
+      opacity: 0.1;
+      z-index: 0;
+    }
+
+    .floating-element:nth-child(1) {
+      top: 10%;
+      left: 5%;
+      width: 100px;
+      height: 100px;
+      background: var(--nepal-orange);
+      border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+      animation: float 15s infinite ease-in-out;
+    }
+
+    .floating-element:nth-child(2) {
+      bottom: 15%;
+      right: 5%;
+      width: 150px;
+      height: 150px;
+      background: var(--nepal-blue);
+      border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+      animation: float 18s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(5deg); }
+      100% { transform: translateY(0) rotate(0deg); }
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .header {
+        padding: 15px 20px;
+      }
+
+      .nav a {
+        margin-left: 15px;
+        font-size: 0.9em;
+      }
+
+      .main-container {
+        padding: 1rem;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      form {
+        padding: 1.5rem;
+      }
+      
+      textarea {
+        min-height: 150px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header {
+        flex-direction: column;
+        padding: 15px;
+      }
+
+      .logo {
+        margin-bottom: 10px;
+      }
+
+      .nav {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .nav a {
+        margin-left: 0;
+        margin-right: 10px;
+        font-size: 0.8em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">
+      <div class="logo-icon">FD</div>
+      <span>FakeDetect</span>
+    </div>
+    <div class="nav">
+      <a href="{{ url_for('home') }}">Home</a>
+      <a href="{{ url_for('english') }}">English News</a>
+      <a href="{{ url_for('nepali') }}">Nepali News</a>
+      <a href="{{ url_for('urltest') }}">Check URL</a>
+      <a href="{{ url_for('logout') }}" class="logout">Log Out</a>
+    </div>
+  </div>
+
+  <div class="main-container">
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    
+    <div class="content-wrapper">
+      <h1>English News</h1>
+          <form id="newsForm" method="post">
+    <textarea name="news_text" placeholder="Enter English news here..." required rows="8" cols="80">{{ news_text }}</textarea><br><br>
+    <button type="submit">Check</button>
+</form>
+
+      {% if prediction %}
+          <h3>Prediction: {{ prediction }}</h3>
+      {% endif %}
+
+    </div>
+  </div>
+</body>
+</html>
+

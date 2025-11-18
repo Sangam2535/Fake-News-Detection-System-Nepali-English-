@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Create Account</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #3f37c9;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --warning: #f8961e;
+            --danger: #ef233c;
+            --gray: #6c757d;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .auth-container {
+            position: relative;
+            width: 100%;
+            max-width: 420px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .auth-header {
+            padding: 30px 30px 20px;
+            text-align: center;
+        }
+
+        .auth-header h2 {
+            color: var(--dark);
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1.8rem;
+        }
+
+        .auth-header p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .auth-form {
+            padding: 0 30px 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            transition: var(--transition);
+            background-color: #f9fafb;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+            background-color: white;
+        }
+
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.25);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(67, 97, 238, 0.35);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            margin-top: 12px;
+        }
+
+        .btn-secondary:hover {
+            background: #f5f8ff;
+        }
+
+        .auth-footer {
+            text-align: center;
+            padding: 20px 30px;
+            border-top: 1px solid #f0f0f0;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .auth-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .alert-danger {
+            background-color: #fee2e2;
+            color: #b91c1c;
+            border-left: 4px solid #ef4444;
+        }
+
+        .alert-danger ul {
+            list-style: none;
+            margin-top: 8px;
+        }
+
+        .alert-danger li {
+            margin-bottom: 4px;
+        }
+
+        .error-message {
+            color: var(--danger);
+            font-size: 0.8rem;
+            margin-top: 6px;
+            display: block;
+        }
+
+        .form-group.error .form-control {
+            border-color: var(--danger);
+        }
+
+        /* Decorative elements */
+        .decorative-circle {
+            position: absolute;
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.15;
+        }
+
+        .circle-1 {
+            width: 200px;
+            height: 200px;
+            background: var(--primary);
+            top: -50px;
+            right: -50px;
+        }
+
+        .circle-2 {
+            width: 300px;
+            height: 300px;
+            background: var(--secondary);
+            bottom: -100px;
+            left: -100px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 480px) {
+            .auth-container {
+                max-width: 100%;
+            }
+            
+            .auth-header, .auth-form {
+                padding: 25px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="decorative-circle circle-1"></div>
+    <div class="decorative-circle circle-2"></div>
+    
+    <div class="auth-container">
+        <div class="auth-header">
+            <h2>Create Account</h2>
+            <p>Join us to get started</p>
+        </div>
+
+        <form action="/register" method="POST" class="auth-form">
+            {{ form.hidden_tag() }}
+            
+            <div class="form-group {% if form.name.errors %}error{% endif %}">
+                {{ form.name.label(for="name") }}
+                {{ form.name(id="name", class="form-control", placeholder="Enter your full name") }}
+                
+                {% if form.name.errors %}
+                    {% for error in form.name.errors %}
+                        <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="form-group {% if form.email.errors %}error{% endif %}">
+                {{ form.email.label(for="email") }}
+                {{ form.email(id="email", class="form-control", placeholder="Enter your email") }}
+                
+                {% if form.email.errors %}
+                    {% for error in form.email.errors %}
+                        <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="form-group {% if form.password.errors %}error{% endif %}">
+                {{ form.password.label(for="password") }}
+                {{ form.password(id="password", class="form-control", placeholder="Create a password") }}
+                
+                {% if form.password.errors %}
+                    {% for error in form.password.errors %}
+                        <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            {{ form.submit(class="btn btn-primary") }}
+            <a href="/login" class="btn btn-secondary">Already have an account? Login</a>
+        </form>
+        </div>
+    </div>
+</body>
+</html>
